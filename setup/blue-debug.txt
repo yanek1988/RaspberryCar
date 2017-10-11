@@ -1,0 +1,18 @@
+# debug usb devices
+lsusb
+# scan for bluetooth devices
+hcitool scan
+
+# fake: sudo l2ping -c 1 68:69:7C:31:9A:75
+sudo l2ping -c 1 68:69:7C:31:9A:75
+
+sudo bluetoothctl
+agent on
+default-agent
+scan on
+pair 64:A7:..:..:..
+connect 64:A7:..:..:..
+
+
+echo 1234|bluez-simple-agent hci0 <bluetooth address>
+sudo rfcomm connect 0 <bluetoothaddress> 1
