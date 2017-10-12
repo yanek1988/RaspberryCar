@@ -11,4 +11,5 @@ apt-get --yes clean
 
 apt-get install bluetooth bluez-utils blueman bluez python-gobject python-gobject-2
 
+apt-get install python3-pip
 pip3 install obd
