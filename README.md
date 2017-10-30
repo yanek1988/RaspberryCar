@@ -13,3 +13,7 @@ Software:
 * Raspbian
 * Python 3
 
+# Installation
+
+* Install Raspbian
+*

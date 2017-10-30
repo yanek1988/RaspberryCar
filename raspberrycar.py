@@ -11,7 +11,7 @@ class Command:
 class Connection:
     def __init__(self, source = None):
         self._source = source
-        self._connection = obd.OBD(self._source)
+        self._connection = obd.OBD(self._source, fast=False)
 
     def call(self, command):
         c = obd.commands[command.name()]
@@ -42,7 +42,8 @@ def get_supported_commands():
 
 
 if __name__ == "__main__":
-    connection = Connection()
+    obd.logger.setLevel(obd.logging.DEBUG)
+    connection = Connection("/dev/rfcomm0")
     for name in get_supported_commands():
         command = Command(name)
         connection.call(command)

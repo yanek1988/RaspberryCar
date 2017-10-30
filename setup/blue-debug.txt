@@ -1,9 +1,9 @@
+# 0
+
 # debug usb devices
 lsusb
 # scan for bluetooth devices
 hcitool scan
-
-# fake: sudo l2ping -c 1 68:69:7C:31:9A:75
 sudo l2ping -c 1 68:69:7C:31:9A:75
 
 sudo bluetoothctl
@@ -16,3 +16,54 @@ connect 64:A7:..:..:..
 
 echo 1234|bluez-simple-agent hci0 <bluetooth address>
 sudo rfcomm connect 0 <bluetoothaddress> 1
+
+
+# 1
+
+import serial
+import time
+
+
+ser = serial.Serial('/dev/tty.OBDII-SPP', timeout=1, baudrate=10400)
+ser.open()
+ser.write(b'ATZ\r\n')
+time.sleep(1)
+print(ser.readlines())
+
+
+# 2
+
+# The default was 38400
+connection = obd.OBD('.\COM8', baudrate=115200)
+
+# 3
+
+# I needed to created a virtual serial port for the bluetooth adapter and put it as argument of the obd.OBD( ) for it to work.
+#  create a virtual serial port for the bluetooth adapter
+sudo rfcomm bind /dev/rfcomm0 00:02:C7:7D:F5:17 1
+ls -l /dev/rfcomm0
+
+# 4
+
+https://askubuntu.com/questions/248817/how-to-i-connect-a-raw-serial-terminal-to-a-bluetooth-connection#252235
+
+2) I'm not entirely sure this is necessary, but in the bluetooth gui menu, pair the device.
+3) in /etc/bluetooth/rfcomm.conf
+rfcomm0 {
+        bind no;
+        device 00:07:80:44:4F:37;
+        channel 1;
+        comment "Serial Port";
+        }
+The "bind no" is important, otherwise it will try to autmatically bind, which presents all sorts of problems for actually accessing the device (as it's quite picky about when its associated)
+4) sudo rfcomm connect 0
+If you have errors, restart the bluetooth service.
+5) screen /dev/rfcomm0
+For actual serial commands transmitted this way, contact your vendor and beg.
+
+
+# 5
+
+http://www.totalcardiagnostics.com/support/Knowledgebase/Article/View/20/0/how-to-install-elm327-bluetooth-obd-scanner-on-android-phonetablet
+
+Pair code: 1234, 0000, 6789
