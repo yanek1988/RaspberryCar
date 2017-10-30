@@ -1,4 +1,6 @@
 import obd
+from datetime import datetime
+from time import sleep
 
 class Command:
     def __init__(self, name):
@@ -12,38 +14,30 @@ class Connection:
     def __init__(self, source = None):
         self._source = source
         self._connection = obd.OBD(self._source, fast=False)
+        if self._connection.is_connected() != True:
+            raise Exception('Unable to connect to OBD')
 
     def call(self, command):
         c = obd.commands[command.name()]
-        print(self._connection.query(c).value)
+        print(command.name(), self._connection.query(c).value)
 
 
 def get_supported_commands():
     """
     TO see all the commands execute pprint(dir(obd.commands))
     """
-    return ['ABSOLUTE_LOAD',
-            'AIR_STATUS',
-            'DISTANCE_W_MIL',
-            'ENGINE_LOAD',
+    return ['ENGINE_LOAD',
             'FUEL_LEVEL',
-            'FUEL_PRESSURE',
-            'FUEL_RATE',
-            'FUEL_STATUS',
-            'LONG_FUEL_TRIM_1',
-            'LONG_FUEL_TRIM_2',
-            'LONG_O2_TRIM_B1',
-            'LONG_O2_TRIM_B2',
-            'OIL_TEMP',
             'RPM',
-            'SHORT_FUEL_TRIM_1',
-            'SHORT_FUEL_TRIM_2',
             'SPEED']
 
 
 if __name__ == "__main__":
     obd.logger.setLevel(obd.logging.DEBUG)
-    connection = Connection("/dev/rfcomm0")
-    for name in get_supported_commands():
-        command = Command(name)
-        connection.call(command)
+    connection = Connection()
+    while True:
+        for name in get_supported_commands():
+            print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            command = Command(name)
+            connection.call(command)
+        sleep(1)

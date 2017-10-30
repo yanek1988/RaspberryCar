@@ -1,8 +1,10 @@
 import raspberrycar
+import obd
 from datetime import datetime
 from time import sleep
 
 if __name__ == "__main__":
+    obd.logger.setLevel(obd.logging.DEBUG)
     connection = raspberrycar.Connection()
     commands = raspberrycar.get_supported_commands()
     while True:
