@@ -19,8 +19,7 @@ fi
 
 hcitool scan > /tmp/scan.log
 cat /tmp/scan.log >> "$LOGFILE"
-MACADDRESS=`cat /tmp/scan.log |grep OBD |awk '{print $1}'`
-# Vgate
+MACADDRESS=`cat /tmp/scan.log |grep 'OBD\|Vgate' |awk '{print $1}'`
 
 if [[ "$MACADDRESS" == "" ]]; then
 	echo "ERROR: unable to get mac address of OBD device" >> "$LOGFILE"
@@ -31,7 +30,7 @@ sleep 5
 rfcomm connect 0 "$MACADDRESS" 1 >> "$LOGFILE" 2>&1 &
 
 sleep 10
-cd "$PROJECTPATH" && python3 listener.py >> "$LISTENERFILE" 2>&1 &
+cd "$PROJECTPATH" && python3 listener.py -m adv >> "$LISTENERFILE" 2>&1 &
 
 exit 0;
 

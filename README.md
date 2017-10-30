@@ -19,7 +19,8 @@ Software:
 ### RaspberryPi
 
 * Install Raspbian
-* `mkdir projects && cd projects && git clone ...`
+* `mkdir projects && cd projects && git clone https://github.com/yanek1988/RaspberryCar.git`
+* `cd ~/projects/RaspberryCar && sudo .setup/install.sh`
 * Add `sh /home/pi/projects/RaspberryCar/setup/autostart.sh` to `/etc/rc.local`
 * [OPTIONAL] Add `*/5 * * * * /home/pi/projects/RaspberryCar/setup/autostart.sh` to `sudo crontab -e`
 
